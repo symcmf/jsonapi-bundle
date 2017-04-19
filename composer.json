@@ -1,5 +1,5 @@
 {
-    "name": "jsonapi-bundle",
+    "name": "symcmf/jsonapi-bundle",
     "license": "MIT",
     "type": "symfony-bundle",
     "description": "Json api bundle for symfony 3",

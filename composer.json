@@ -6,6 +6,15 @@
     "autoload": {
         "psr-4": { "JsonApiBundle\\": "" }
     },
+    "keywords" : ["json api", "bundle"],
+    "authors" : [
+        {
+            "name": "Anastasiya Duchkina"
+        },
+        {
+            "name": "Alexandr Kuzmenko"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "icanboogie/inflector": "^1.4",

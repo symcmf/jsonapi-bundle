@@ -1,0 +1,20 @@
+{
+    "name": "jsonapi-bundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "description": "Json api bundle for symfony 3",
+    "autoload": {
+        "psr-4": { "JsonApiBundle\\": "" }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "icanboogie/inflector": "^1.4",
+        "neomerx/json-api": "^1.0",
+        "symfony/symfony": "3.2.*"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.0-dev"
+        }
+    }
+}

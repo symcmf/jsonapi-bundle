@@ -1,0 +1,37 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+imports:
+    - { resource: json-api/category_services.yml}
+
+parameters:
+    #parameter_name: value
+
+services:
+
+    jsonapi.base.service:
+        class: JsonApiBundle\Services\BaseJSONApiBundle
+        arguments: ['@doctrine.orm.default_entity_manager']
+
+    jsonapi.hydrator.service:
+        class: JsonApiBundle\Services\BaseHydrator
+        arguments: ['@doctrine.orm.default_entity_manager']
+
+    jsonapi.validator:
+        class: JsonApiBundle\Services\Validator\Validator
+        arguments: ['@validator', '@doctrine.orm.default_entity_manager', '@jsonapi.request', '@jsonapi.error']
+
+    jsonapi.request:
+        class: JsonApiBundle\Request\JSONApiRequest
+        arguments: ['@request_stack']
+
+    jsonapi.listener:
+        class: JsonApiBundle\Listeners\ControllerListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    jsonapi.response:
+        class: JsonApiBundle\Services\JSONApiResponse
+
+    jsonapi.error:
+        class: JsonApiBundle\Services\JSONApiError

@@ -1,9 +1,9 @@
 <?php
 
-namespace JsonBundle\Services\Validator;
+namespace JsonApiBundle\Services\Validator;
 
-use JsonBundle\Request\JSONApiRequest;
-use JsonBundle\Services\JSONApiError;
+use JsonApiBundle\Request\JSONApiRequest;
+use JsonApiBundle\Services\JSONApiError;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Doctrine\ORM\EntityManager;

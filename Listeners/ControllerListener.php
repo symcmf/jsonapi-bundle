@@ -53,11 +53,11 @@ class ControllerListener
             /** @var Validator $validator */
             $validator = $this->container->get('jsonapi.validator');
 
-//            $result = $validator->validate(
-//                $jsonApiRequest->getDataAttributes(),
-//                $jsonApiRequest->getRelationSection(),
-//                $jsonApiRequest->getClassNameByType($jsonApiRequest->getDataSection()['type'])
-//            );
+            $result = $validator->validate(
+                $jsonApiRequest->getDataAttributes(),
+                $jsonApiRequest->getRelationSection(),
+                $jsonApiRequest->getClassNameByType($jsonApiRequest->getDataSection()['type'])
+            );
 
             if (true !== true) {
 

@@ -48,8 +48,6 @@ class ControllerListener
             /** @var JSONApiRequest $jsonApiRequest */
             $jsonApiRequest =  $this->container->get('jsonapi.request');
 
-            var_dump($jsonApiRequest);die();
-
             /** @var Validator $validator */
             $validator = $this->container->get('jsonapi.validator');
 

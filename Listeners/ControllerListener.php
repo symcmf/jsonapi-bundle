@@ -57,7 +57,7 @@ class ControllerListener
                 $jsonApiRequest->getClassNameByType($jsonApiRequest->getDataSection()['type'])
             );
 
-            if (true !== true) {
+            if ($result !== true) {
 
                 $request = new Request();
                 $resolver =  $this->container->get('debug.controller_resolver');

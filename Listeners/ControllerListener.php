@@ -43,7 +43,9 @@ class ControllerListener
             return;
         }
 
-        if ( array_shift($controller) instanceof BaseController) {
+        $controller = array_shift($controller);
+
+        if ($controller instanceof BaseController) {
 
             /** @var JSONApiRequest $jsonApiRequest */
             $jsonApiRequest =  $this->container->get('jsonapi.request');
@@ -51,7 +53,10 @@ class ControllerListener
             /** @var Validator $validator */
             $validator = $this->container->get('jsonapi.validator');
 
+            $bundleName = explode('\\', get_class($controller))[0];
+
             $result = $validator->validate(
+                $bundleName,
                 $jsonApiRequest->getDataAttributes(),
                 $jsonApiRequest->getRelationSection(),
                 $jsonApiRequest->getClassNameByType($jsonApiRequest->getDataSection()['type'])

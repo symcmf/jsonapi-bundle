@@ -11,8 +11,6 @@ use Neomerx\JsonApi\Encoder\Encoder;
 
 class Validator
 {
-    const ENTITY_NAMESPACE = 'AppBundle\Entity\\';
-
     protected $requestAttributes;
     protected $validator;
     protected $entityManager;
@@ -35,12 +33,13 @@ class Validator
     }
 
     /**
+     * @param string $bundleName
      * @param string $className
      * @return object
      */
-    protected function getEntity($className)
+    protected function getEntity($bundleName, $className)
     {
-        $class = Validator::ENTITY_NAMESPACE . $className;
+        $class = $bundleName . '\Entity\\' . $className;
 
         return new $class;
     }
@@ -51,7 +50,7 @@ class Validator
      */
     protected function getHydrator($type)
     {
-        $class = 'JsonBundle\\' . $type . '\\Hydrator';
+        $class = 'JsonApiBundle\\' . $type . '\\Hydrator';
 
         return new $class($this->entityManager);
     }
@@ -96,13 +95,14 @@ class Validator
     /**
      * @param array $errors
      * @param string $type
+     * @param string $bundleName
      * @param array $requestAttributes
      */
-    protected function getMainEntityErrors(&$errors, $type, $requestAttributes)
+    protected function getMainEntityErrors(&$errors, $type, $bundleName, $requestAttributes)
     {
         /** @var Hydrator $hydrator */
         $hydrator = $this->getHydrator($type);
-        $object = $this->getEntity($type);
+        $object = $this->getEntity($bundleName, $type);
 
         $this->setValuesInHydrator($hydrator, $object, $requestAttributes);
         $this->setErrors($errors, $object, 'badRequest', 'data/attributes/');
@@ -110,10 +110,11 @@ class Validator
 
     /**
      * @param array $errors
+     * @param string $bundleName
      * @param array $relationAttributes
      * @return array|void
      */
-    protected function getRelationEntitiesErrors(&$errors, $relationAttributes)
+    protected function getRelationEntitiesErrors(&$errors, $bundleName, $relationAttributes)
     {
         foreach ($relationAttributes as $type => $data) {
             $dataRows = $relationAttributes[$type]['data'];
@@ -121,7 +122,7 @@ class Validator
             if (isset($dataRows['type'])) {
                 $dataType = $this->jsonApiRequest->getClassNameByType($dataRows['type']);
                 $hydrator = $this->getHydrator($dataType);
-                $entity = $this->getEntity($dataType);
+                $entity = $this->getEntity($bundleName, $dataType);
                 unset($dataRows['type']);
 
                 $this->setValuesInHydrator($hydrator, $entity, $dataRows);
@@ -134,7 +135,7 @@ class Validator
             foreach ($dataRows as $attributes) {
                 $dataType = $this->jsonApiRequest->getClassNameByType($attributes['type']);
                 $hydrator = $this->getHydrator($dataType);
-                $entity = $this->getEntity($dataType);
+                $entity = $this->getEntity($bundleName, $dataType);
                 unset($attributes['type']);
 
                 $this->setValuesInHydrator($hydrator, $entity, $attributes);
@@ -144,17 +145,18 @@ class Validator
     }
 
     /**
+     * @param string $bundleName
      * @param array $requestAttributes
      * @param array $relationAttributes
      * @param string $type
      * @return bool|string
      */
-    public function validate($requestAttributes, $relationAttributes, $type)
+    public function validate($bundleName, $requestAttributes, $relationAttributes, $type)
     {
         $errors = [];
 
-        $this->getMainEntityErrors($errors, $type, $requestAttributes);
-        $this->getRelationEntitiesErrors($errors, $relationAttributes);
+        $this->getMainEntityErrors($errors, $type, $bundleName, $requestAttributes);
+        $this->getRelationEntitiesErrors($errors, $bundleName, $relationAttributes);
 
         return (!empty($errors)) ? Encoder::instance()->encodeErrors($errors) : true;
     }

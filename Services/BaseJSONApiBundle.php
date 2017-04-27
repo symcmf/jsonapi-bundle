@@ -34,18 +34,19 @@ class BaseJSONApiBundle
     }
 
     /**
-     * @param $class
-     * @param $pageAttributes
+     * @param string $class
+     * @param array $orderBy
+     * @param array $pageAttributes
      *
      * @return array
      */
-    public function getQuery($class, $pageAttributes)
+    public function getQuery($class, $orderBy = [], $pageAttributes)
     {
         $offset = ($pageAttributes['number'] - 1) * $pageAttributes['size'];
         $object = $this
             ->entityManager
             ->getRepository($class)
-            ->findBy([], [], $pageAttributes['size'], $offset);
+            ->findBy([], $orderBy, $pageAttributes['size'], $offset);
 
         return $object;
     }

@@ -129,8 +129,7 @@ abstract class BaseController extends Controller
     {
         $pagination = $this->getJsonRequest()->getPaginationAttributes();
 
-        $objects = $this->getBaseService()->getQuery(
-            $this->getClass(), $pagination);
+        $objects = $this->getBaseService()->getQuery($this->getClass(), $this->getOrderByParams(), $pagination);
 
         if (empty($pagination)) {
             return $this->createResponse($this->viewObject($objects), Response::HTTP_OK);
@@ -152,6 +151,28 @@ abstract class BaseController extends Controller
         $object = $this->getBaseService()->getObject($id, $this->getClass());
 
         return $this->createResponse($this->viewObject($object), Response::HTTP_OK);
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrderByParams()
+    {
+        $sortAttributes = $this->getJsonRequest()->getSortAttributes();
+
+        if(empty(current($sortAttributes))) return [];
+
+        $orderBy = [];
+        foreach ($sortAttributes as $attribute) {
+            $direction = 'ASC';
+            if ($attribute{0} == '-') {
+                $direction = 'DESC';
+                $attribute = substr($attribute, 1);
+            }
+            $orderBy[$attribute] = $direction;
+        }
+
+        return $orderBy;
     }
 
     /**

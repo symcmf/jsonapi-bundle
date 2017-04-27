@@ -70,7 +70,7 @@ class JSONApiRequest
     public function getSparseFieldAttributes()
     {
         $result = [];
-        $fields = $this->getRequest()->request->get('fields');
+        $fields = $this->getRequest()->query->get('fields');
 
         if ($fields) {
             foreach ($fields as $key => $value) {
